@@ -48,7 +48,6 @@ app.use('/api/v1/carts', cartsRouter);
 app.use('/api/v1/checkboxes', checkboxesRouter);
 
 
-
 app.use('*', (req, res, next) => {
     next(new AppError(404, "not found this server."))
 })
