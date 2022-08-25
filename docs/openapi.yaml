@@ -1,0 +1,551 @@
+openapi: 3.0.0
+info:
+  description: Una API Crud de un sistema de reserva de hoteles.
+  version: 1.0.0
+  title: Api Hoteles #Nombre a decidir
+tags:
+  - name: auth
+    description: Endpoints que manejen la autentificacion.
+  - name: hotel
+    description: Endpoints de los hoteles. #Reescribir
+  - name: fecha
+    description: Endpoints de las fechas libres de los hoteles.
+  - name: review
+    description: Endpoints de los reviews de los hoteles.
+  - name: usuario
+    description: Endpoints de los usuarios.
+  - name: reserva
+    description: Endpoints de las reservas de hoteles.
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Ingresar como usuario.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+      responses:
+        '200':
+          description: Ingreso Exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: asdasdqwergsdfgdfxcvsdfgrfgrdfwertwre
+                  username:
+                    type: string
+        '401':
+          description: Nombre de usuario o contraseña invalidos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid username or password
+  /hoteles:
+    get:
+      tags:
+      - hotel
+      summary: Buscar hoteles
+      responses:
+        200:
+          description: Successful Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref : '#/components/schemas/Hotel'
+    post:
+      tags:
+      - hotel
+      summary: Agrega un hotel
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/UnidentifiedHotel'
+      responses:
+        201:
+          description: Hotel agregado con exito.
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/Hotel'
+        400:
+          description: Campos faltantes o invalidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequestError'
+        404:
+          description: El usuario no esta logueado como admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAuthorizedError'
+  /hoteles/{hotelId}:
+    put:
+      tags:
+      - hotel
+      security:
+      - bearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          description: El id del hotel.
+          required: true
+          schema:
+            type: number
+      summary: Actualiza un hotel con el id dado.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/UnidentifiedHotel'
+      responses:
+        200:
+          description: Hotel actualizado con exito.
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/Hotel'
+        400:
+          description: Campos faltantes o invalidos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: password needed
+        404:
+          description: El usuario no esta logueado u hotelId inexistente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAuthorizedError'
+    delete:
+      tags:
+      - hotel
+      security:
+      - bearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          description: El id del hotel.
+          required: true
+          schema:
+            type: number
+      summary: Elimina un hotel con el id dado.
+      responses:
+        204:
+          description: Hotel eliminado con exito.
+        404:
+          description: El usuario no esta logueado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAuthorizedError'
+  /hoteles/{hotelId}/fechas:  #Revisar
+    get:
+      tags:
+      - fecha
+      parameters:
+        - name: hotelId
+          in: path
+          description: El id del hotel.
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: Devuelve las fechas libres del hotel.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fechas'
+  /hoteles/{hotelId}/reviews:
+    post:
+      tags:
+      - review
+      security:
+      - bearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          description: El id del hotel.
+          required: true
+          schema:
+            type: number
+      summary: Agrega una review a un hotel.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        201:
+          description: Review agregada con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+        400:
+          description: Campos faltantes o invalidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequestError'
+        403:
+          description: No tiene Autorizacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAuthorizedError'
+        404:
+          description: Hotel no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+  /hoteles/{hotelId}/reservas:
+    get:
+      description: Devuelve la informacion de todas las reservas del hotel
+      parameters:
+        - name: hotelId
+          in: path
+          description: El id del hotel.
+          required: true
+          schema:
+            type: number
+      tags:
+      - reserva
+      security:
+      - bearerAuth: []
+      responses:
+        200:
+          description: Devuelve las reservas del hotel exitosamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserva'
+        404:
+          description: Hotel no encontrado o no se está logueado como admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+  /usuarios:
+    get:
+      tags:
+      - usuario
+      summary: Pide los usuarios del sistema
+      responses:
+        200:
+          description: Devuelve los usuarios correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+    post:
+      tags:
+      - usuario
+      summary: Agrega un usuario al sistema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/RegisterBody'
+      responses:
+        201:
+          description: Usuario agregado con exito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        400:
+          description: Campos faltantes o invalidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequestError'
+  /usuarios/{usuarioId}:
+    put:
+      tags:
+      - usuario
+      summary: Actualiza un usuario del sistema
+      security:
+      - bearerAuth: []
+      parameters:
+        - name: usuarioId
+          in: path
+          description: El id del usuario.
+          required: true
+          schema:
+            type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/RegisterBody'
+      responses: 
+        200:
+          description: Usuario actualizado con exito
+        400:
+          description: Campos faltantes o invalidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequestError'
+        404:
+          description: El usuario no esta logueado o usuarioId inexistente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAuthorizedError'
+    delete:
+      tags:
+      - usuario
+      summary: Elimina un usuario del sistema
+      security:
+      - bearerAuth: []
+      parameters:
+        - name: usuarioId
+          in: path
+          description: El id del usuario.
+          required: true
+          schema:
+            type: number
+      responses:
+        204:
+          description: Usuario eliminado con exito.
+        404:
+          description: El usuario no esta logueado o usuarioId inexistente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAuthorizedError'
+  /usuarios/{usuarioId}/favoritos:
+    post:
+      tags:
+      - usuario
+      security:
+      - bearerAuth: []
+      parameters:
+        - name: usuarioId
+          in: path
+          description: El id del usuario.
+          required: true
+          schema:
+            type: number
+      summary: Agrega un hotel a favoritos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id
+              properties:
+                id:
+                  type: number
+      responses:
+        204:
+          description: Hotel favorito agregado con exito.
+        400:
+          description: Campos faltantes o invalidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequestError'
+        404:
+          description: Usuario no encontrado o no se está logueado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+  /usuarios/{usuarioId}/reservas:
+    get:
+      tags:
+      - reserva
+      parameters:
+        - name: usuarioId
+          in: path
+          description: El id del usuario.
+          required: true
+          schema:
+            type: number
+      description: Devuelve la informacion de todas las reservas hechas por el usuario
+      security:
+      - bearerAuth: []
+      responses:
+        200:
+          description: Devuelve la información exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserva' #TODO Agregar schema
+        404:
+          description: Usuario no encontrado o no se está logueado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+    # Habria que ver si es un POST aca la reserva
+  # TODO
+  # Contactar al propietario o recepcionista del alojamiento.
+  # Endpoint de Realizar y registrar la reserva.
+  # Pagar por el servicio de alojamiento.
+  # Filtro de los hoteles en GET /hoteles
+  # Respuestas de GET /hoteles/{hotelId}/fechas
+  # Ver en una tabla los detalles de la reserva de cada persona
+components:
+  schemas:
+    RegisterBody:
+      type: object
+      required:
+        - username
+        - password
+        - mail
+        - nombre
+        - apellido
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        mail:
+          type: string
+        nombre:
+          type: string
+        apellido:
+          type: string
+    LoginBody:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    Hotel:
+      allOf:
+      - type: object
+        required:
+          - id
+        properties:
+          id:
+            type: number
+      - $ref : '#/components/schemas/UnidentifiedHotel'
+    UnidentifiedHotel:
+      type: object
+      required:
+        - nombre
+        - habitaciones
+        - descripcion
+        - costo
+        - lat
+        - lng
+      properties:
+        nombre:
+          type: string
+          example: 'Sheraton'
+        habitaciones:
+          type: number
+          minimum: 0
+        descripcion:
+          type: string
+        costo:
+          type: number
+          minimum: 0
+        lat:
+          type: string
+          description: Latitud de la ubicación del hotel.
+        lng:
+          type: string
+          description: Longitud de la ubicación del hotel.
+    Review:
+      type: object
+      required:
+      - comentario
+      - puntuacion
+      properties:
+        comentario:
+          type: string
+        puntuacion:
+          type: number
+          minimum: 0
+          maximum: 5
+    Reserva:
+      type: object
+      properties:
+        TODO: 
+          type: string
+          example: 'Agregar esquema de las resevas'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    NotAuthorizedError:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        example: { error: 'no esta autorizado a hacer eso' }
+    NotFoundError:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        example: { error: 'no se encontro el elemento o alguno relacionado' }
+    InvalidRequestError:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - type: object
+        example: { error: 'falta algun parametro o es invalido' }
+    Fechas:
+      type: object
+      properties:
+        TODO:
+          type: string
+          example: 'Definir implementacion y hacer el esquema de las fechas'
+    Usuario:
+      type: object
+      required:
+      - nombre
+      - apellido
+      - id
+      properties:
+        nombre:
+          type: string
+        apellido:
+          type: string
+        id:
+          type: number
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
