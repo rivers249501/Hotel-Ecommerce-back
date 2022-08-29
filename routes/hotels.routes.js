@@ -4,6 +4,7 @@ const {
   getAllHotel,
   createHotel,
   getHotelById,
+  getHotelByUbication,
   updateHotelPatch,
   deleteHotel
 } = require('../controllers/hotels.controller');
@@ -19,6 +20,8 @@ const { createHotelValidators,
 } = require('../middlewares/validators.middleware');
 
 const router = express.Router();
+
+router.get('/search/:query', getHotelByUbication )
 
 router.use(validateSession)
 router.get('/', getAllHotel);
