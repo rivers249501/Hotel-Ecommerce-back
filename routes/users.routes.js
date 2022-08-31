@@ -25,7 +25,7 @@ const {
 
   router.post('/login', loginUser);
   
-  router.use('/all', validateSession).get('/all', getAllUsers);
+  router.use('/all', getAllUsers)
   
   // router.use(validateSession)
   

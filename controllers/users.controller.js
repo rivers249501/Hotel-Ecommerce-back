@@ -74,12 +74,14 @@ dotenv.config({ path: '../config.env' });
   });
   
   exports.getAllUsersHotel = catchAsync(async (req, res, next) => {
-    const { currentUser } = req;
+    // const { currentUser } = req;
     // console.log(currentUser.id);
     // const { id  } =req.params;
   
     const allhotel = await Hotel.findAll({
-      where: { userId: currentUser.id, status: 'active' }
+      // where: { userId: currentUser.id, status: 'active' }
+      where: { status: 'active' }
+
     });
   
     res.status(201).json({

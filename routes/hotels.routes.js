@@ -35,7 +35,8 @@ router.post('/',upload.single('imgUrl'), createHotel);
 
 router.use('/:id', hotelExists)
       .route('/:id')
-      .get(hotelOwner, getHotelById)
+      // .get(hotelOwner, getHotelById)
+      .get(getHotelById)
       .patch( hotelOwner, updateHotelPatch)
       .delete( hotelOwner, deleteHotel)
 
