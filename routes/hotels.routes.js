@@ -15,11 +15,12 @@ const { hotelExists,
   hotelOwner 
 } = require('../middlewares/hotel.middleware');
 
-const { upload } = require('../util/multer')
 
 const { createHotelValidators, 
   validateResult 
 } = require('../middlewares/validators.middleware');
+
+const { upload } = require('../util/multer')
 
 const router = express.Router();
 
