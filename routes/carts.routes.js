@@ -18,7 +18,7 @@ const { validateResult, addHotelInCartValidation } = require('../middlewares/val
 
 const router = express.Router();
 
-router.use(validateSession)
+// router.use(validateSession)
 router.get('/', getAllCart); //To de future only for admin
 router.get('/', cartExists, getCartByUser); //The userId is taken from token and cart exist is create to the future
 

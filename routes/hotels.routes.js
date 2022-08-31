@@ -26,7 +26,7 @@ const router = express.Router();
 
 router.get('/search/:query', getHotelByUbication )
 
-router.use(validateSession)
+// router.use(validateSession)
 router.get('/', getAllHotel);
 
 // router.post('/', createHotelValidators, validateResult, createHotel);

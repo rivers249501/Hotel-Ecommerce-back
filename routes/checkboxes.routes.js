@@ -22,7 +22,7 @@ const { createHotelValidators,
 
 const router = express.Router();
 
-router.use(validateSession)
+// router.use(validateSession)
 router.get('/', getAllCheckboxes);
 
 router.post('/', createHotelValidators, validateResult, createCheckboxes);

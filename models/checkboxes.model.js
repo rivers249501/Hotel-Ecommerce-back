@@ -12,28 +12,48 @@ const Checkboxes = sequelize.define('checkboxes', {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  lavabajillas: {
-    type: DataTypes.INTEGER,
+  Cocina: {
+    type: DataTypes.STRING,
     allowNull: false
   },
-  Habitaciones: {
-    type: DataTypes.INTEGER,
+  Aire_acondicionado: {
+    type: DataTypes.STRING,
     allowNull: false
   },
-  frigobar: {
-    type: DataTypes.INTEGER,
+  Piscina: {
+    type: DataTypes.STRING,
     allowNull: false
   },
-  desayuno: {
-    type: DataTypes.INTEGER,
+  Estacionamiento_techado: {
+    type: DataTypes.STRING,
     allowNull: false
   },
-  yacuzzi: {
-    type: DataTypes.INTEGER,
+  Microondas: {
+    type: DataTypes.STRING,
     allowNull: false
   },
-  vistaalmar: {
-    type: DataTypes.INTEGER,
+  Wifi: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  Jacuzzy: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  Frigobar: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  Lavadora: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  Baño_en_suite: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  Sala_fitness: {
+    type: DataTypes.STRING,
     allowNull: false
   },
 

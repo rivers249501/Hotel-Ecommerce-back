@@ -38,16 +38,32 @@ exports.getCheckboxesById = catchAsync(async (req, res, next) => {
 });
 
 exports.createCheckboxes = catchAsync(async (req, res, next) => {
-  const { lavabajillas, Habitaciones, frigobar, desayuno, yacuzzi, vistaalmar } = req.body;
+  const { 
+    Cocina,
+    Aire_acondicionado, 
+    Piscina, 
+    Estacionamiento_techado, 
+    Microondas, 
+    Wifi,
+    Jacuzzy,
+    Frigobar,
+    Lavadora,
+    Baño_en_suite,
+    Sala_fitness, } = req.body;
   const { id } = req.currentUser;
 
   const newCheckboxes = await Checkboxes.create({
-    lavabajillas, 
-    Habitaciones, 
-    frigobar, 
-    desayuno, 
-    yacuzzi, 
-    vistaalmar,
+    Cocina, 
+    Aire_acondicionado, 
+    Piscina, 
+    Estacionamiento_techado, 
+    Microondas, 
+    Wifi,
+    Jacuzzy,
+    Frigobar,
+    Lavadora,
+    Baño_en_suite,
+    Sala_fitness,
     userId: id
   });
 
@@ -62,12 +78,17 @@ exports.updateCheckboxesPatch = catchAsync(async (req, res, next) => {
 
   const data = filterObj(
     req.body,
-    lavabajillas,
-    Habitaciones,
-    frigobar,
-    desayuno,
-    yacuzzi,
-    vistaalmar
+    Cocina,
+    Aire_acondicionado, 
+    Piscina, 
+    Estacionamiento_techado, 
+    Microondas, 
+    Wifi,
+    Jacuzzy,
+    Frigobar,
+    Lavadora,
+    Baño_en_suite,
+    Sala_fitness,
     // id: product.userId
   );
 
