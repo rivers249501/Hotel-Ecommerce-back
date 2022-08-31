@@ -5,12 +5,16 @@ const { Order } = require("../models/orders.model");
 const { Hotel } = require("../models/hotel.model");
 const { HotelInCart } = require("../models/hotelInCart.model");
 const { User } = require("../models/users.model");
-
+const { Checkboxes } =require('../models/checkboxes.model');
 
 const initModels = () => {
   // 1 User <----> M H
   User.hasMany(Hotel);
   Hotel.belongsTo(User);
+
+  //1 Hotel <------> Checkboxes
+  Hotel.hasOne(Checkboxes)
+  Checkboxes.belongsTo(Hotel)
 
   // 1 user <----> M Order
   User.hasMany(Order) //throughout cart;

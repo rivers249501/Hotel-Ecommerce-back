@@ -33,6 +33,10 @@ const Hotel = sequelize.define('hotel', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  imgUrl: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false

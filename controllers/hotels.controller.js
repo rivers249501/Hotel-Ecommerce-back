@@ -2,6 +2,7 @@ const { ref, uploadBytes } =require('firebase/storage')
 //Models
 const { Hotel } = require('../models/hotel.model');
 const { User } = require('../models/users.model');
+const { Checkboxes } =require('../models/checkboxes.model')
 
 // Utils
 const { catchAsync } = require('../util/catchAsync');
@@ -12,7 +13,8 @@ const { storage } =require('../util/firebase')
 exports.getAllHotel = catchAsync(async (req, res, next) => {
   const hotel = await Hotel.findAll({
     where: { status: 'active' },
-    include: [{ model: User, attributes: { exclude: ['password'] } }]
+    include: [{ model: Checkboxes, }]
+    // include: [{ model: User, attributes: { exclude: ['password'] } }]
   });
 
   // if (hotel.length === 0) {
@@ -58,12 +60,12 @@ exports.getHotelByUbication = async (req, res, next) => {
 };
 
 exports.createHotel = catchAsync(async (req, res, next) => {
-  const { title, description, quantity, price, ubication, } = req.body;
+  const { title, description, quantity, price, ubication, imgUrl } = req.body;
   const { id } = req.currentUser;
 
   //Upload img to Cloud storage(firebase)
-  // const imgRef = ref(storage, `imgs/${Date.now()}-${req.file.originalname}`);
-  // const result = await uploadBytes(imgRef, req.file.buffer);
+  const imgRef = ref(storage, `imgs/${Date.now()}-${req.file.originalname}`);
+  const result = await uploadBytes(imgRef, req.file.buffer);
 
   const newHotel = await Hotel.create({
     title,
@@ -71,7 +73,7 @@ exports.createHotel = catchAsync(async (req, res, next) => {
     quantity,
     price,
     ubication,
-    // imgUrl: result.metadata.fullPath,
+    imgUrl: result.metadata.fullPath,
     userId: id
   });
 

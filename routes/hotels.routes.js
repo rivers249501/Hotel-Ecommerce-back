@@ -15,6 +15,8 @@ const { hotelExists,
   hotelOwner 
 } = require('../middlewares/hotel.middleware');
 
+const { upload } = require('../util/multer')
+
 const { createHotelValidators, 
   validateResult 
 } = require('../middlewares/validators.middleware');
@@ -26,7 +28,9 @@ router.get('/search/:query', getHotelByUbication )
 router.use(validateSession)
 router.get('/', getAllHotel);
 
-router.post('/', createHotelValidators, validateResult, createHotel);
+// router.post('/', createHotelValidators, validateResult, createHotel);
+router.post('/',upload.single('imgUrl'), createHotel);
+
 
 router.use('/:id', hotelExists)
       .route('/:id')
