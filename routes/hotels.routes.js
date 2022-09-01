@@ -30,7 +30,7 @@ router.get('/search/:query', getHotelByUbication )
 router.get('/', getAllHotel);
 
 // router.post('/', createHotelValidators, validateResult, createHotel);
-router.post('/',upload.single('imgUrl'), createHotel);
+router.post('/',upload.single('photo'), createHotel);
 
 
 router.use('/:id', hotelExists)

@@ -9,19 +9,35 @@ const Hotel = sequelize.define('hotel', {
     allowNull: false
   },
   title: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   description: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  quantity: {
+  price: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  price: {
+  country: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  city: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  adress: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  cp: {
     type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  state: {
+    type: DataTypes.STRING,
     allowNull: false
   },
   status: {
@@ -29,11 +45,7 @@ const Hotel = sequelize.define('hotel', {
     allowNull: false,
     defaultValue: 'active'
   },
-  ubication: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  imgUrl: {
+  photo: {
     type: DataTypes.STRING(255),
     allowNull: false
   },

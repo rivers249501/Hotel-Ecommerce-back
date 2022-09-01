@@ -45,9 +45,9 @@ exports.getHotelByUbication = async (req, res, next) => {
   
   try {
 
-    const {ubication} = req.params
+    const {country} = req.params
     let search = await Hotel.findAll({where:{status: 'active' },
-    title: new RegExp('^'+ubication+'$', "i")
+    title: new RegExp('^'+country+'$', "i")
     });
 
     res.json(search)
@@ -60,7 +60,7 @@ exports.getHotelByUbication = async (req, res, next) => {
 };
 
 exports.createHotel = catchAsync(async (req, res, next) => {
-  const { title, description, quantity, price, ubication, imgUrl, id } = req.body;
+  const { title, description, price, country, city, adress, cp, state, photo, id } = req.body;
   // const { id } = req.params
   // const { id } = req.currentUser;
 
@@ -71,10 +71,13 @@ exports.createHotel = catchAsync(async (req, res, next) => {
   const newHotel = await Hotel.create({
     title,
     description,
-    quantity,
     price,
-    ubication,
-    imgUrl: result.metadata.fullPath,
+    country,
+    city,
+    adress,
+    cp, 
+    state,
+    photo: result.metadata.fullPath,
     userId: id
   });
 
@@ -88,13 +91,16 @@ exports.updateHotelPatch = catchAsync(async (req, res, next) => {
   const { hotel } = req;
 
   const data = filterObject(
-    req.body,
+    'req.body',
     'title',
     'description',
-    'quantity',
     'price',
-    'ubication',
-    'images'
+    'country',
+    'city',
+    'adress',
+    'cp', 
+    'state',
+    'photo'
     // id: product.userId
   );
 
