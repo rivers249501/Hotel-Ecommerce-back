@@ -78,7 +78,7 @@ exports.createHotel = catchAsync(async (req, res, next) => {
     cp, 
     state,
     photo: result.metadata.fullPath,
-    userId: id
+    userId: +id
   });
 
   res.status(201).json({
