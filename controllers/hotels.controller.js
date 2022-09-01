@@ -61,11 +61,14 @@ exports.getHotelByUbication = async (req, res, next) => {
 
 exports.createHotel = catchAsync(async (req, res, next) => {
   const { title, description, price, country, city, adress, cp, state, photo, id } = req.body;
+
   // const { id } = req.params
   // const { id } = req.currentUser;
 
   //Upload img to Cloud storage(firebase)
+  console.log(req.file.originalname);
   const imgRef = ref(storage, `imgs/${Date.now()}-${req.file.originalname}`);
+  
   const result = await uploadBytes(imgRef, req.file.buffer);
 
   const newHotel = await Hotel.create({
