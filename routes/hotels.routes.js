@@ -38,7 +38,8 @@ router.use('/:id', hotelExists)
       // .get(hotelOwner, getHotelById)
       .get(getHotelById)
       .patch( hotelOwner, updateHotelPatch)
-      .delete( hotelOwner, deleteHotel)
+      // .delete( hotelOwner, deleteHotel)
+      .delete(deleteHotel)
 
 
 module.exports = { hotelRouter: router };

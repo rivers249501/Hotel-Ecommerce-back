@@ -42,11 +42,35 @@ exports.getHotelById = catchAsync(async (req, res, next) => {
 });
 
 exports.getHotelByUbication = async (req, res, next) => {
-  
+
+  // const { country } = req.params;
+  // const countrySelect = await Hotel.findOne({
+  //   where: {country, status: 'active'},
+  //   title: new RegExp('^'+country+'$', "i")
+
+  // });
+  // res.status(200).json({
+  //   status: 'succes',
+  //   data: {
+  //     countrySelect
+  //   }
+  // })
+
+
+  // const { country } =req.params;
+  // const search =Hotel.find( user => {
+  //   let isValid = true;
+  //   for(key in country){
+  //     console.log(key, user[key], filters[key]);
+  //     isValid = isValid && user[key] == filters[key]
+  //   }
+  //   return isValid
+  // })
+  // res.send(search);
   try {
 
     const {country} = req.params
-    let search = await Hotel.findAll({where:{status: 'active' },
+    let search = await Hotel.findOne({where:{status: 'active' },
     title: new RegExp('^'+country+'$', "i")
     });
 
